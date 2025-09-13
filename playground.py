@@ -9,4 +9,4 @@ lootTable = {
 }
 
 print(lootTable[1])
-# loot = [rand.randint(1,100) if lootTable[1]]
+loot = [rand.randint(1,100) if lootTable[item] <= ]
