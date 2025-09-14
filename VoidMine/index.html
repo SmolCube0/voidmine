@@ -3,99 +3,146 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>VoidMine</title>
+  <title>VoidMine — Prototype</title>
   <link rel="stylesheet" href="./css/style.css" />
 </head>
+<script type="module" src="./js/main.js"></script>
 <body>
-  <!-- Top HUD -->
-  <header class="hud">
-    <div class="brand">VOIDMINE</div>
-    <div class="spacer"></div>
-    <div class="stat">V$: <span id="money">0</span></div>
-    <div class="stat">XP: <span id="xp">0</span></div>
-    <div class="stat">Inv: <span id="inv">0</span>/<span id="invMax">100</span> kg</div>
+
+  <!-- ===== TOP HUD ===== -->
+  <header class="hud panel">
+    <div class="group">
+      <div class="pill mono bold">VOIDMINE</div>
+    </div>
+
+    <div class="xpbar">
+  <div class="level mono" id="xpLevel">1</div>
+  <div class="bar" id="xpBar" style="--p:0.45">
+    <!-- the fill (white) -->
+    <div class="fill" id="xpFill"></div>
+
+    <!-- current XP number: two layers -->
+    <!-- 1) Outside layer (white text on black) positioned by --p -->
+    <span class="marker mono" id="xpNowOuter">45</span>
+    <!-- 2) Inside-the-fill copy (black text on white) pinned to the fill’s right edge -->
+    <span class="marker-inverse mono" id="xpNowInner">45</span>
+
+    <!-- target XP (two layers so it stays legible too) -->
+    <span class="target mono" id="xpTarget">100</span>
+    <span class="target-inverse mono" id="xpTargetInverse">100</span>
+  </div>
+</div>
+
+    <div class="group right">
+      <div class="pill mono">V$ <span id="money">0</span></div>
+      <div class="pill mono">INV <span id="inv">0</span>/<span id="invMax">100</span>kg</div>
+      <div class="pill mono">⛏ <span id="durPick">100%</span></div>
+    </div>
   </header>
 
-  <!-- 3-column app grid -->
+  <!-- ===== MAIN GRID ===== -->
   <main class="app">
-    <!-- Left: Depth & navigation -->
-    <aside class="panel depth">
-      <div class="panel-title">Depth</div>
-      <div class="depth-display">
-        <button id="up" class="btn round" aria-label="Ascend">⬆</button>
-        <div class="depth-readout"><span id="depth">0</span>m</div>
-        <button id="down" class="btn round" aria-label="Descend">⬇</button>
+
+    <!-- LEFT: Multi-purpose panel (tabs) -->
+    <aside class="panel">
+      <div class="title mono">MULTI</div>
+
+      <div class="tabs">
+        <button class="tab active mono" data-tab="quests">Quests</button>
+        <button class="tab mono" data-tab="scanner">Scanner</button>
+        <button class="tab mono" data-tab="notes">Notes</button>
+        <button class="tab mono" data-tab="upgrades">Upgrades</button>
       </div>
 
-      <div class="bookmark">
-        <div class="panel-sub">Bookmarks</div>
-        <ul id="bookmarks" class="list">
-          <!-- future: saved depths -->
-        </ul>
-        <button class="btn ghost" id="addBookmark">+ Save Depth</button>
+      <div id="tabContent" class="tab-content mono small">
+        <!-- Quests (default) -->
+        <div data-pane="quests">
+          <div class="kv"><span>Mine 10kg Stone</span><span>0/10</span></div>
+          <div class="hr"></div>
+          <div class="kv"><span>Reach −50m depth</span><span>−12m</span></div>
+          <div class="hr"></div>
+          <div class="kv"><span>Process ores once</span><span>0/1</span></div>
+        </div>
       </div>
     </aside>
 
-    <!-- Center: Layer interaction -->
-    <section class="panel layer">
-      <div class="panel-title">Layer</div>
+    <!-- CENTER: Gameplay / Depth / Scan / Ores -->
+    <section class="panel">
+      <div class="title mono">LAYER</div>
 
-      <div class="base-block" id="baseBlock">
-        <!-- base-layer info -->
-        <div class="label">Base Layer</div>
-        <div class="row">
-          <div id="baseInfo">—</div>
-          <button id="mineBase" class="btn">Mine Base</button>
-        </div>
+      <!-- Elevation controls (compact, like your mock) -->
+      <div class="elev">
+        <div class="display mono">Depth: <span id="depth">0</span>m</div>
+        <button id="up" class="btn square mono" aria-label="Ascend">▲</button>
+        <button id="down" class="btn square mono" aria-label="Descend">▼</button>
       </div>
 
-      <div class="scan-block">
-        <div class="row">
-          <button id="scanBtn" class="btn primary">Scan Layer</button>
-          <div id="scanStatus" class="muted">Ready</div>
-        </div>
-        <div class="timer" id="regenTimer" hidden>Regenerates in 00:00</div>
+      <div class="hr"></div>
+
+      <!-- Base layer block -->
+      <div class="kv mono">
+        <span>Base: <span id="baseInfo">—</span></span>
+        <button id="mineBase" class="btn mono">Mine Base</button>
       </div>
 
-      <div class="ores-block">
-        <div class="panel-sub">Found Ores</div>
-        <div id="ores" class="ore-grid">
-          <!-- buttons/cards for ore results -->
+      <div class="hr"></div>
+
+      <!-- Scan + timer -->
+      <div class="kv mono">
+        <button id="scanBtn" class="btn mono">Scan Layer</button>
+        <span id="scanStatus" class="muted">Ready</span>
+      </div>
+      <div id="regenTimer" class="mono small muted" hidden>Regenerates in 00:00</div>
+
+      <div class="hr"></div>
+
+      <!-- Ore results grid -->
+      <div id="ores" class="ore-grid">
+        <!-- Example cards (you’ll generate with JS) -->
+        <!--
+        <div class="card ore mono">
+          <div>Copper</div>
+          <button class="btn mono">Mine</button>
         </div>
+        -->
       </div>
     </section>
 
-    <!-- Right: Tools & Info -->
-    <aside class="panel tools">
-      <div class="panel-title">Tools</div>
-      <div class="tool">
-        <div class="tool-name">Pickaxe</div>
-        <div class="bar"><div id="pickaxeDur" class="fill" style="width:60%"></div></div>
-        <div class="muted">Durability <span id="pickaxeDurPct">60%</span></div>
-      </div>
-      <div class="tool">
-        <div class="tool-name">Drill</div>
-        <div class="bar"><div id="drillDur" class="fill" style="width:0%"></div></div>
-        <div class="muted">Durability <span id="drillDurPct">0%</span></div>
-      </div>
-      <div class="tool">
-        <div class="tool-name">Axe</div>
-        <div class="bar"><div id="axeDur" class="fill" style="width:100%"></div></div>
-        <div class="muted">Durability <span id="axeDurPct">100%</span></div>
+    <!-- RIGHT: Backpack / Inventory -->
+    <aside class="panel backpack">
+      <div class="title mono">BACKPACK</div>
+      <div class="grid" id="packGrid">
+        <!-- slots (filled by JS) -->
+        <!-- <div class="slot"><span class="small">Cu</span><div class="badge mono">1.2kg</div></div> -->
       </div>
 
-      <div class="panel-title mt">Actions</div>
-      <button class="btn ghost" id="processBtn">Process Ores</button>
-      <button class="btn ghost" id="ascendBtn">Ascend</button>
-      <button class="btn ghost" id="upgradeBtn">Upgrades</button>
-      <button class="btn ghost" id="settingsBtn">Settings</button>
+      <div class="hr"></div>
+      <div class="kv">
+        <button id="processBtn" class="btn mono">Process</button>
+        <button id="ascendBtn" class="btn mono">Ascend</button>
+      </div>
     </aside>
+
   </main>
 
-  <!-- Footer: Messages / Toast area -->
-  <footer class="footer">
-    <div id="msg">Welcome to the void.</div>
-  </footer>
+  <!-- ===== BOTTOM DRAWER ===== -->
+  <section class="drawer panel">
+    <div class="header">
+      <span class="mono bold" id="drawerTitle">Event Log</span>
+      <div class="modes">
+        <button class="mode active mono" data-mode="log">Log</button>
+        <button class="mode mono" data-mode="timers">Timers</button>
+        <button class="mode mono" data-mode="queue">Queue</button>
+        <button class="mode mono" data-mode="contracts">Contracts</button>
+      </div>
+      <button id="drawerToggle" class="btn square mono" aria-label="Collapse">▾</button>
+    </div>
+    <div id="drawerBody" class="body mono small">
+      <!-- Example log lines -->
+      <div class="log-line">−12m: scanned… found Stone, Coal</div>
+      <div class="log-line">Mined 2.8kg Stone (+V$112, +3 XP)</div>
+    </div>
+  </section>
 
   <script type="module" src="./js/main.js"></script>
 </body>

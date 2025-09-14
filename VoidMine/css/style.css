@@ -19,7 +19,7 @@ body{
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font: 16px/1.35 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font: 16px/1.35 ui-monospace, "JetBrains Mono", SFMono-Regular, "Liberation Mono", "Courier New", monospace;
   letter-spacing: .2px;
 }
 
@@ -105,6 +105,62 @@ body{
   border-left: var(--border-w) solid var(--ink);
 }
 
+.xpbar {
+  display: flex; align-items: center;
+  height: 28px; border: var(--border-w) solid var(--ink);
+  border-radius: var(--radius); overflow: hidden;
+}
+
+/* Left level label */
+.xpbar .level {
+  padding: 0 8px; background: var(--ink); color: var(--bg);
+  height: 100%; display: flex; align-items: center;
+}
+
+/* Bar container uses --p (0..1) to position everything */
+.xpbar .bar { position: relative; flex: 1; height: 100%; }
+.xpbar .fill {
+  position: absolute; inset: 0 auto 0 0;
+  width: calc(var(--p) * 100%);  /* fill width by progress */
+  background: var(--ink);        /* white fill */
+}
+
+/* ========== Current XP number that follows the bar ========== */
+/* Outside layer: sits at the bar edge, rendered over black area */
+.xpbar .marker {
+  position: absolute; top: 50%;
+  left: calc(var(--p) * 100%);   /* follow the progress */
+  transform: translate(-8px, -50%);    /* nudge left a bit; keep centered vertically */
+  color: var(--ink);             /* white on black background */
+  pointer-events: none; white-space: nowrap; font-size: 13px;
+}
+
+/* Inside-the-fill copy: pinned to the fill’s right edge (same spot), black on white */
+.xpbar .marker-inverse {
+  position: absolute; top: 50%;
+  right: max(8px, calc(100% - (var(--p) * 100%) + 8px)); 
+  /* Explanation: this effectively pins it to the fill’s right edge with 8px inset.
+     As --p grows, the right value shrinks, keeping the text glued to the fill edge. */
+  transform: translateY(-50%);
+  color: var(--bg);              /* black text (since your --bg is pure black) */
+  pointer-events: none; white-space: nowrap; font-size: 13px;
+}
+
+/* ========== Target XP pinned at right, double-rendered for contrast ========== */
+.xpbar .target,
+.xpbar .target-inverse {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  font-size: 13px; pointer-events: none; white-space: nowrap;
+}
+/* Visible over black (outside the fill) */
+.xpbar .target        { right: 8px; color: var(--ink); }
+/* Copy inside the fill (black text on white) */
+.xpbar .target-inverse{
+  color: var(--bg);
+  /* keep it inside the fill’s right edge */
+  right: max(8px, calc(100% - (var(--p) * 100%) + 8px));
+}
+
 /* ======= Main app grid (left / center / right) ======= */
 
 .app{
@@ -129,22 +185,34 @@ body{
 
 /* ======= Left: Multi-purpose box (tabbed) ======= */
 
-.tabs{
-  display: flex; gap: 6px; margin-bottom: 8px;
+.tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+
+  overflow-x: auto;
+  white-space: nowrap;
+  flex-wrap: nowrap;
+
+  /* hide scrollbars in all browsers */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
 }
-.tab{
-  padding: 6px 10px; cursor: pointer;
+.tabs::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.tab {
+  padding: 6px 10px;
+  cursor: pointer;
   border: var(--border-w) solid var(--ink);
   border-radius: var(--radius);
   background: transparent;
+  flex-shrink: 0; /* prevent shrinking */
 }
-.tab.active{ background: var(--ink); color: var(--bg); }
-
-.tab-content{
-  min-height: 220px;
-  padding: 8px;
-  border: var(--border-w) solid var(--ink);
-  border-radius: var(--radius);
+.tab.active {
+  background: var(--ink);
+  color: var(--bg);
 }
 
 /* ======= Center: Gameplay area ======= */
