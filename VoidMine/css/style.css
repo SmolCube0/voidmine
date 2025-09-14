@@ -1,0 +1,244 @@
+/* ===============================
+   VOIDMINE — Black + White Outline UI
+   Font: Menlo-ish monospace stack
+   =============================== */
+
+:root{
+  --bg: #000;          /* pure black */
+  --ink: #fff;         /* pure white */
+  --muted: #cfcfcf;    /* softer white for secondary text */
+  --danger: #ff5a5a;
+  --accent: #7ee2ff;   /* subtle cyan for highlights if needed */
+  --border-w: 1.5px;   /* thin white lines */
+  --radius: 6px;       /* subtle rounding (0 for square) */
+}
+
+*{ box-sizing: border-box; }
+html, body{ height: 100%; }
+body{
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.35 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  letter-spacing: .2px;
+}
+
+/* ======= Generic building blocks ======= */
+
+.panel,
+.card,
+.hud,
+.drawer,
+.slot,
+.input,
+.btn,
+.progress {
+  background: transparent;
+  border: var(--border-w) solid var(--ink);
+  border-radius: var(--radius);
+}
+
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+.muted { color: var(--muted); }
+.small { font-size: 12px; }
+.bold  { font-weight: 700; }
+.right { text-align: right; }
+.center{ text-align: center; }
+
+/* ======= Top HUD ======= */
+
+.hud{
+  display: grid;
+  grid-template-columns: 320px 1fr 280px;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  margin: 8px;
+}
+
+.hud .group{
+  display: flex; align-items: center; gap: 8px;
+}
+
+.hud .pill{
+  padding: 6px 10px;
+  border: var(--border-w) solid var(--ink);
+  border-radius: var(--radius);
+}
+
+.hud .elevation{
+  display: grid;
+  grid-template-columns: 110px 32px 32px;
+  gap: 8px; align-items: center;
+  padding: 6px 8px;
+}
+
+.hud .money,
+.hud .settings{
+  padding: 6px 10px; display:flex; align-items:center; gap:8px; justify-content:space-between;
+}
+
+/* ======= Progress/Level bar ======= */
+
+.progress{
+  width: 100%;
+  height: 28px;
+  display: grid;
+  grid-template-columns: 1fr auto; /* bar + level number */
+  align-items: center;
+}
+
+.progress .bar{
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress .fill{
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 40%;                    /* set via JS */
+  background: var(--ink);
+}
+
+.progress .label{
+  padding: 0 10px;
+  border-left: var(--border-w) solid var(--ink);
+}
+
+/* ======= Main app grid (left / center / right) ======= */
+
+.app{
+  display: grid;
+  grid-template-columns: 260px 1fr 300px;
+  gap: 12px;
+  padding: 0 8px 8px;
+}
+
+.panel{
+  padding: 10px;
+  min-height: 100px;
+}
+
+.panel .title{
+  margin: -2px 0 8px;
+  padding: 4px 8px;
+  display: inline-block;
+  border: var(--border-w) solid var(--ink);
+  border-radius: var(--radius);
+}
+
+/* ======= Left: Multi-purpose box (tabbed) ======= */
+
+.tabs{
+  display: flex; gap: 6px; margin-bottom: 8px;
+}
+.tab{
+  padding: 6px 10px; cursor: pointer;
+  border: var(--border-w) solid var(--ink);
+  border-radius: var(--radius);
+  background: transparent;
+}
+.tab.active{ background: var(--ink); color: var(--bg); }
+
+.tab-content{
+  min-height: 220px;
+  padding: 8px;
+  border: var(--border-w) solid var(--ink);
+  border-radius: var(--radius);
+}
+
+/* ======= Center: Gameplay area ======= */
+
+.gameplay{
+  min-height: 420px;
+  display: grid;
+  place-items: center;
+  font-size: 42px;
+}
+
+/* ======= Right: Backpack ======= */
+
+.backpack .grid{
+  display: grid;
+  grid-template-columns: repeat(4, 56px);
+  grid-auto-rows: 56px;
+  gap: 6px;
+  padding: 6px 2px;
+  max-height: 340px;
+  overflow: auto;
+}
+.slot{
+  width: 56px; height: 56px;
+  display: grid; place-items: center;
+  position: relative;
+}
+
+.slot .badge{
+  position: absolute; left: 2px; bottom: 2px;
+  padding: 1px 3px; font-size: 10px; background: var(--ink); color: var(--bg);
+  border-radius: 3px;
+}
+
+/* Scrollbar (WebKit) — thin white */
+.backpack .grid::-webkit-scrollbar{ width: 10px; }
+.backpack .grid::-webkit-scrollbar-track{ background: transparent; }
+.backpack .grid::-webkit-scrollbar-thumb{ background: var(--ink); }
+
+/* ======= Buttons ======= */
+
+.btn{
+  padding: 6px 10px;
+  color: var(--ink);
+  background: transparent;
+  cursor: pointer;
+}
+.btn:hover{ background: rgba(255,255,255,0.08); }
+.btn.square{ width: 32px; height: 32px; display:grid; place-items:center; padding:0; }
+
+/* ======= Bottom drawer ======= */
+
+.drawer{
+  margin: 8px; padding: 8px;
+}
+
+.drawer .header{
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 8px;
+}
+.drawer .modes{
+  display: flex; gap: 6px; margin-left: auto;
+}
+.mode{
+  padding: 4px 8px; cursor: pointer;
+  border: var(--border-w) solid var(--ink);
+  border-radius: var(--radius);
+}
+.mode.active{ background: var(--ink); color: var(--bg); }
+
+.drawer .body{
+  min-height: 90px; max-height: 180px; overflow: auto;
+  padding: 6px;
+  border: var(--border-w) solid var(--ink);
+  border-radius: var(--radius);
+}
+
+.log-line{
+  padding: 4px 2px; border-bottom: 1px dashed rgba(255,255,255,0.25);
+}
+.log-line:last-child{ border-bottom: 0; }
+
+/* ======= Tiny widgets ======= */
+
+.kv{ display:flex; justify-content:space-between; gap:12px; }
+.hr { border-top: var(--border-w) solid var(--ink); opacity:.6; margin:8px 0; }
+
+/* ======= Elevation control (compact like your mock) ======= */
+
+.elev{
+  display: grid; grid-template-columns: 1fr 32px 32px; gap: 6px; align-items: center;
+}
+.elev .display{
+  padding: 6px 8px; text-align: left;
+  border: var(--border-w) solid var(--ink);
+  border-radius: var(--radius);
+}

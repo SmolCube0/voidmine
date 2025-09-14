@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>VoidMine</title>
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+  <!-- Top HUD -->
+  <header class="hud">
+    <div class="brand">VOIDMINE</div>
+    <div class="spacer"></div>
+    <div class="stat">V$: <span id="money">0</span></div>
+    <div class="stat">XP: <span id="xp">0</span></div>
+    <div class="stat">Inv: <span id="inv">0</span>/<span id="invMax">100</span> kg</div>
+  </header>
+
+  <!-- 3-column app grid -->
+  <main class="app">
+    <!-- Left: Depth & navigation -->
+    <aside class="panel depth">
+      <div class="panel-title">Depth</div>
+      <div class="depth-display">
+        <button id="up" class="btn round" aria-label="Ascend">⬆</button>
+        <div class="depth-readout"><span id="depth">0</span>m</div>
+        <button id="down" class="btn round" aria-label="Descend">⬇</button>
+      </div>
+
+      <div class="bookmark">
+        <div class="panel-sub">Bookmarks</div>
+        <ul id="bookmarks" class="list">
+          <!-- future: saved depths -->
+        </ul>
+        <button class="btn ghost" id="addBookmark">+ Save Depth</button>
+      </div>
+    </aside>
+
+    <!-- Center: Layer interaction -->
+    <section class="panel layer">
+      <div class="panel-title">Layer</div>
+
+      <div class="base-block" id="baseBlock">
+        <!-- base-layer info -->
+        <div class="label">Base Layer</div>
+        <div class="row">
+          <div id="baseInfo">—</div>
+          <button id="mineBase" class="btn">Mine Base</button>
+        </div>
+      </div>
+
+      <div class="scan-block">
+        <div class="row">
+          <button id="scanBtn" class="btn primary">Scan Layer</button>
+          <div id="scanStatus" class="muted">Ready</div>
+        </div>
+        <div class="timer" id="regenTimer" hidden>Regenerates in 00:00</div>
+      </div>
+
+      <div class="ores-block">
+        <div class="panel-sub">Found Ores</div>
+        <div id="ores" class="ore-grid">
+          <!-- buttons/cards for ore results -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Right: Tools & Info -->
+    <aside class="panel tools">
+      <div class="panel-title">Tools</div>
+      <div class="tool">
+        <div class="tool-name">Pickaxe</div>
+        <div class="bar"><div id="pickaxeDur" class="fill" style="width:60%"></div></div>
+        <div class="muted">Durability <span id="pickaxeDurPct">60%</span></div>
+      </div>
+      <div class="tool">
+        <div class="tool-name">Drill</div>
+        <div class="bar"><div id="drillDur" class="fill" style="width:0%"></div></div>
+        <div class="muted">Durability <span id="drillDurPct">0%</span></div>
+      </div>
+      <div class="tool">
+        <div class="tool-name">Axe</div>
+        <div class="bar"><div id="axeDur" class="fill" style="width:100%"></div></div>
+        <div class="muted">Durability <span id="axeDurPct">100%</span></div>
+      </div>
+
+      <div class="panel-title mt">Actions</div>
+      <button class="btn ghost" id="processBtn">Process Ores</button>
+      <button class="btn ghost" id="ascendBtn">Ascend</button>
+      <button class="btn ghost" id="upgradeBtn">Upgrades</button>
+      <button class="btn ghost" id="settingsBtn">Settings</button>
+    </aside>
+  </main>
+
+  <!-- Footer: Messages / Toast area -->
+  <footer class="footer">
+    <div id="msg">Welcome to the void.</div>
+  </footer>
+
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>
